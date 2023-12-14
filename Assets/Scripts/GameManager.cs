@@ -12,6 +12,12 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text rightplayertext;
     public Paddle leftpaddle;
     public Paddle rightpaddle;
+    //[field: SerializeField] public ArrowGenerator arrowgenerator { get; private set; }
+
+    //public void FixedUpdate()
+    //{
+    //    arrowgenerator.Start();
+    //}
     public void Leftplayerscores()
     {
         _leftplayerscores++;
@@ -35,7 +41,7 @@ public class GameManager : MonoBehaviour
         this.leftpaddle.ResetPosition();
         this.rightpaddle.ResetPosition();
     }
-
+   
     private void OnApplicationQuit()
     {
 

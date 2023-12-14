@@ -40,7 +40,7 @@ public class EyeController: MonoBehaviour
             {
                 foreach (var gaze in data.gaze_on_surfaces)
                 {
-                    ProcessGaze(gaze.NormPosX, gaze.NormPosY);
+                    //ProcessGaze(gaze.NormPosX, gaze.NormPosY);
                     sumx += gaze.NormPosX;
                     sumy += gaze.NormPosY;
                     lastTimestamp = gaze.timestamp;
@@ -55,7 +55,7 @@ public class EyeController: MonoBehaviour
                 //Using the last gaze data
                 var lastdatax = data.gaze_on_surfaces[numberofgazes - 1].NormPosX;
                 var lastdatay = data.gaze_on_surfaces[numberofgazes - 1].NormPosY;
-                //ProcessGaze(lastdatax, lastdatay);
+                ProcessGaze(lastdatax, lastdatay);
             }
         }
         
