@@ -16,6 +16,7 @@ public class RightP : Paddle
 
     public Vector3 _eyepos;
     [field: SerializeField] public EyeController _eyeController;
+    [field: SerializeField] public LinearEquations _linearEquations;
 
     [SerializeField] bool onArrowsEyeEnable;
     [SerializeField] bool onEyeEnable;
@@ -43,6 +44,20 @@ public class RightP : Paddle
             MovewithArrows();
     }
 
+    private void FixedUpdate()
+    {
+        if (_direction.sqrMagnitude != 0)
+        {
+            _rigidbody.AddForce(_direction * this.speed);
+        }
+
+    }
+
+    private void MovewithEye(Vector3 positionofeye)
+    {
+        _eyepos = positionofeye;
+    }
+
     private void KeyboardUpdate()
     {
         if (Input.GetKey(KeyCode.UpArrow))
@@ -57,18 +72,6 @@ public class RightP : Paddle
         {
             _direction = Vector2.zero;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if(_direction.sqrMagnitude != 0){
-            _rigidbody.AddForce(_direction * this.speed);
-        }
-        
-    }
-    private void MovewithEye(Vector3 positionofeye)
-    {
-        _eyepos = positionofeye;    
     }
 
     private void MoveUsingEye()
@@ -101,25 +104,6 @@ public class RightP : Paddle
 
         }
     }
-   
-    public void UpArrowTrigger()
-    {
-        _direction = Vector2.up;
-        
-    }
-
-    public void DownArrowTrigger()
-    {
-        _direction = Vector2.down;
-        //ResetArrowDirection();
-        //Debug.Log("Ok");
-    }
-
-    public void ResetArrowDirection()
-    {
-        _direction = Vector2.zero;
-        Debug.Log("Ok");
-    }
 
     public void MovewithArrows()
     {
@@ -133,11 +117,11 @@ public class RightP : Paddle
             {
                 if (_eyepos.x <= 7.9012)
                 {
-                    decision = firstlinearequation((double)_eyepos.x);
+                    decision = _linearEquations.firstlinearequation((double)_eyepos.x);
                 }
                 else if (_eyepos.x > 7.9012)
                 {
-                    decision = secondlinearequation((double)_eyepos.x);
+                    decision = _linearEquations.secondlinearequation((double)_eyepos.x);
                 }
                 else
                 {
@@ -146,6 +130,7 @@ public class RightP : Paddle
                 if (decision >= _eyepos.y)
                 {
                     _direction = Vector2.up;
+
                 }
                 else if (decision <= _eyepos.y)
                 {
@@ -160,11 +145,11 @@ public class RightP : Paddle
             {
                 if (_eyepos.x <= 7.8904)
                 {
-                    decision = thirdlinearequation((double)_eyepos.x);
+                    decision = _linearEquations.thirdlinearequation((double) _eyepos.x);
                 }
                 else if (_eyepos.x > 7.8904)
                 {
-                    decision = fourthlinearequation((double)_eyepos.x);
+                    decision = _linearEquations.fourthlinearequation((double) _eyepos.x);
                 }
                 else { decision = 0f; }
                 if (decision <= _eyepos.y)
@@ -181,32 +166,5 @@ public class RightP : Paddle
         }
         else _direction = Vector2.zero; 
     }
-
-    //k
-    private double firstlinearequation(double x)
-    {
-        var sum = (1.6 * x) - 10.0637;
-        return sum;
-    }
-    //l
-    private double secondlinearequation(double x)
-    {
-        var sum =  (-1.5* x) + 14.329533;
-        return sum;
-    }
-    //m
-    private double thirdlinearequation(double x)
-    {
-        var sum = (-1.6 * x) + 10.055;
-        return sum;
-    }
-    //n
-    private double fourthlinearequation(double x)
-    {
-        var sum = (1.531913 * x) - 14.5893;
-        return sum;
-    }
-
-
 
 }
