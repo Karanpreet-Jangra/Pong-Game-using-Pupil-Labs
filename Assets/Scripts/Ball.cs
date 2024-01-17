@@ -4,6 +4,7 @@ public class Ball : MonoBehaviour
 {
     public float speed = 200.0f;
     private Rigidbody2D _rigidbody;
+    
 
     private void Awake()
     {
@@ -19,7 +20,6 @@ public class Ball : MonoBehaviour
     {
         _rigidbody.position = Vector3.zero;
         _rigidbody.velocity = Vector3.zero;
-
         
     }
     public void AddStartingForce()

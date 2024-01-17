@@ -2309,10 +2309,11 @@ MonoBehaviour:
   _eyepos: {x: 0, y: 0, z: 0}
   _eyeController: {fileID: 1818142399}
   onArrowsEyeEnable: 0
-  onEyeEnable: 1
-  onKeyboardEnable: 0
+  onEyeEnable: 0
+  onKeyboardEnable: 1
   _mouseposition: {x: 0, y: 0}
   _worldposition: {x: 0, y: 0}
+  timeRemaining: 0.4
 --- !u!114 &1455464417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2720,6 +2721,7 @@ MonoBehaviour:
   rightplayertext: {fileID: 1439494962}
   leftpaddle: {fileID: 494157006}
   rightpaddle: {fileID: 1455464416}
+  timebetweenrounds: 0
 --- !u!4 &1641975004
 Transform:
   m_ObjectHideFlags: 0

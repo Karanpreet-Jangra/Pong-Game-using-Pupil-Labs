@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Windows.Speech;
 
 [Serializable]
 public class EyeController: MonoBehaviour 
@@ -16,6 +17,7 @@ public class EyeController: MonoBehaviour
     double smooth_x = 0.5f;
     double smooth_y = 0.5f;
     public double smoothness = 0.35f;
+    private double confid;
 
     private void OnEnable()
     {
@@ -44,6 +46,7 @@ public class EyeController: MonoBehaviour
                     sumx += gaze.NormPosX;
                     sumy += gaze.NormPosY;
                     lastTimestamp = gaze.timestamp;
+                    confid = gaze.confidence;
                     //Debug.Log($"{gaze.topic} {gaze.timestamp} {gaze.NormPosX} {gaze.NormPosY}");
                 }
                 sumx = sumx / numberofgazes;
@@ -56,6 +59,7 @@ public class EyeController: MonoBehaviour
                 var lastdatax = data.gaze_on_surfaces[numberofgazes - 1].NormPosX;
                 var lastdatay = data.gaze_on_surfaces[numberofgazes - 1].NormPosY;
                 ProcessGaze(lastdatax, lastdatay);
+                //Debug.Log(confid);
             }
         }
         

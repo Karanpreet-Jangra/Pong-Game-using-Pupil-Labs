@@ -12,12 +12,17 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text rightplayertext;
     public Paddle leftpaddle;
     public Paddle rightpaddle;
+
+    private float timeoffirstround;
+    public float timebetweenrounds;
+
     //[field: SerializeField] public ArrowGenerator arrowgenerator { get; private set; }
 
     //public void FixedUpdate()
     //{
     //    arrowgenerator.Start();
     //}
+
     public void Leftplayerscores()
     {
         _leftplayerscores++;
@@ -40,11 +45,34 @@ public class GameManager : MonoBehaviour
         this.ball.AddStartingForce();
         this.leftpaddle.ResetPosition();
         this.rightpaddle.ResetPosition();
+
+        if((_rightplayerscores == 1 && _leftplayerscores == 0) || (_rightplayerscores == 0 && _leftplayerscores == 1))
+        {
+            timeoffirstround = Time.time;
+            Debug.Log("Time between each round: ");
+            Debug.Log(timeoffirstround);
+            timebetweenrounds = timeoffirstround;
+        }
+        else
+        {
+            var temp1 = Time.time;
+            var temp2 = timeoffirstround;
+            //Debug.Log("Ok");
+            //Debug.Log(temp1);
+            var timeofnextrounds = temp1 - temp2;
+            Debug.Log("Time between each round: ");
+            Debug.Log(timeofnextrounds);
+            timeoffirstround = temp1;
+            timebetweenrounds = timeofnextrounds;
+        }
+        
     }
    
     private void OnApplicationQuit()
     {
 
         NetMQConfig.Cleanup(false);
+        //The total time since start
+        //Debug.Log((Time.realtimeSinceStartup));
     }
 }

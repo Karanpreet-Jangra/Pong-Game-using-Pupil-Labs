@@ -25,6 +25,9 @@ public class RightP : Paddle
     public Vector2 _mouseposition;
     public Vector2 _worldposition;
 
+    public float timeRemaining = 0.6f;
+    protected bool timeIsRunning;
+
     private double decision;
     private void OnEnable()
     {
@@ -35,12 +38,12 @@ public class RightP : Paddle
     {
         _renderer = GetComponent<Renderer>();
     }
-    private void Update(){
+    private void Update() {
         if (onKeyboardEnable)
             KeyboardUpdate();
         if (onEyeEnable)
             MoveUsingEye();
-        if(onArrowsEyeEnable)
+        if (onArrowsEyeEnable)
             MovewithArrows();
     }
 
@@ -89,19 +92,56 @@ public class RightP : Paddle
                 {
                     if (_eyepos.y > (_rigidbody.position.y + _paddlerightyoffset))
                     {
-                        _direction = Vector2.up;
-                        _renderer.material.color = Color.black;
+                        Moveup(timeIsRunning=true);
                     }
                     else if (_eyepos.y < (_rigidbody.position.y - _paddlerightyoffset))
                     {
-                        _direction = Vector2.down;
-                        _renderer.material.color = Color.gray;
+                        Movedown(timeIsRunning=true);
                     }
-                    else { _direction = Vector2.zero; }
+                    else {
+                        timeRemaining = 0.6f;
+                        _direction = Vector2.zero; 
+                    }
                 }
 
-            }   
+            }
 
+        }
+    }
+
+    public void Moveup(bool timerunning)
+    {
+        if (timerunning)
+        {
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= Time.deltaTime;
+            }
+            else
+            {
+                timeRemaining = 0.6f;
+                timeIsRunning = false;
+                _direction = Vector2.up;
+                _renderer.material.color = Color.black;
+            }
+        }
+    }
+
+    public void Movedown(bool timerunning)
+    {
+        if (timerunning)
+        {
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= Time.deltaTime;
+            }
+            else
+            {
+                timeRemaining = 0.6f;
+                timeIsRunning = false;
+                _direction = Vector2.down;
+                _renderer.material.color = Color.gray;
+            }
         }
     }
 
