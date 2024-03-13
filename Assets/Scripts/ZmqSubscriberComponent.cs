@@ -8,6 +8,5 @@ public class ZmqSubscriberComponent : MonoBehaviour
     private void OnDestroy()
     {
         Subscriber.Stop();
-        //Debug.Log("Destroy");
     }
 }

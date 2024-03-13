@@ -12,18 +12,22 @@ public class TopArrowControl : MonoBehaviour
     {
         _renderer = GetComponent<Renderer>();
     }
+
     private void OnEnable()
     {
         _eyeController.oneyePosition += MovewithEye;
     }
+
     private void MovewithEye(Vector3 positionofeye)
     {
         _eyepos = positionofeye;
     }
+
     private void Update()
     {
         MovewithArrows();
     }
+
     public void MovewithArrows()
     {
         //Arrows

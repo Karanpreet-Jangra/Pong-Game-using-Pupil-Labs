@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-
 [Serializable]
 public class LinearEquations
 {
@@ -30,4 +29,3 @@ public class LinearEquations
         return sum;
     }
 }
-    

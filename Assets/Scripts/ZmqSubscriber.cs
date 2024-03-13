@@ -21,7 +21,6 @@ using System.Collections;
 public class ZmqSubscriber
 {
     const string sub = "SUB_PORT", pub = "PUB_PORT";
-
     public string ip = "127.0.0.1";
     public int port = 50020;
     public string topic;
@@ -109,5 +108,4 @@ public class ZmqSubscriber
             //Debug.Log(MessagePackSerializer.ConvertToJson(msg[1].ToByteArray()));   
         }
     }
-
 }

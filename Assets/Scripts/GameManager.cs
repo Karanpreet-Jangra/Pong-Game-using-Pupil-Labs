@@ -2,9 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using NetMQ;
+using System.IO;
+using System;
 
 public class GameManager : MonoBehaviour
 {
+    private string path = "C:/Users/karen/Documents/GithubProjectPongGame/Pong-Game-using-Pupil-Labs/Assets/Metrics/";
+    public string playerName = "";
+    public string mode = "";
+    private string filename = "";
+    public int totalNumberOfTries;
+
     public Ball ball;
     private int _leftplayerscores;
     private int _rightplayerscores;
@@ -14,28 +22,32 @@ public class GameManager : MonoBehaviour
     public Paddle rightpaddle;
 
     private float timeoffirstround;
-    public float timebetweenrounds;
-
-    //[field: SerializeField] public ArrowGenerator arrowgenerator { get; private set; }
-
-    //public void FixedUpdate()
-    //{
-    //    arrowgenerator.Start();
-    //}
+    private float timebetweenrounds;
+  
 
     public void Leftplayerscores()
     {
+        CalculateTimeBetweenRounds();
+        WriteMetrics();
         _leftplayerscores++;
-        //Debug.Log(_leftplayerscores);
-        this.leftplayertext.text = _leftplayerscores.ToString();
+        if (_leftplayerscores == totalNumberOfTries)
+        {
+            QuitGame();
+        }
+        this.leftplayertext.text = _leftplayerscores.ToString(); 
         ResetRound();
     }
 
     public void Rightplayerscores()
     {
+        CalculateTimeBetweenRounds();
+        WriteMetrics();
         _rightplayerscores++;
-        //Debug.Log(_rightplayerscores);
-        this.rightplayertext.text = _rightplayerscores.ToString();
+        if (_rightplayerscores == totalNumberOfTries)
+        {
+            QuitGame();
+        }
+        this.rightplayertext.text = _rightplayerscores.ToString(); 
         ResetRound();
     }
 
@@ -44,9 +56,12 @@ public class GameManager : MonoBehaviour
         this.ball.ResetPosition();
         this.ball.AddStartingForce();
         this.leftpaddle.ResetPosition();
-        this.rightpaddle.ResetPosition();
+        this.rightpaddle.ResetPosition();   
+    }
 
-        if((_rightplayerscores == 1 && _leftplayerscores == 0) || (_rightplayerscores == 0 && _leftplayerscores == 1))
+    private void CalculateTimeBetweenRounds()
+    {
+        if ((_rightplayerscores == 1 && _leftplayerscores == 0) || (_rightplayerscores == 0 && _leftplayerscores == 1))
         {
             timeoffirstround = Time.time;
             Debug.Log("Time between each round: ");
@@ -62,17 +77,35 @@ public class GameManager : MonoBehaviour
             var timeofnextrounds = temp1 - temp2;
             Debug.Log("Time between each round: ");
             Debug.Log(timeofnextrounds);
+            Debug.Log(Application.dataPath);
             timeoffirstround = temp1;
             timebetweenrounds = timeofnextrounds;
         }
-        
     }
-   
+
+    private void WriteMetrics()
+    {
+        filename = path + playerName + mode + ".csv";
+        Debug.Log($"{filename}");
+        TextWriter writer = new StreamWriter(filename, true);
+        var ballspeed = ball._rigidbody.velocity.x;
+        writer.WriteLine("AI Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
+                          + timebetweenrounds + "," + "Ball Speed: " + "," + ballspeed);
+        writer.Close();
+
+    }
+
     private void OnApplicationQuit()
     {
 
         NetMQConfig.Cleanup(false);
         //The total time since start
         //Debug.Log((Time.realtimeSinceStartup));
+    }
+
+    public void QuitGame()
+    {
+        UnityEditor.EditorApplication.isPlaying = false;
+        WriteMetrics();
     }
 }

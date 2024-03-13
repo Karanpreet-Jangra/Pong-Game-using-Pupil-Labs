@@ -5,33 +5,39 @@ public class RightP : Paddle
 {
     private Vector2 _direction;
     //Constrains for the eye position
-    public float _gamebottomrightpositionx = 5.6f;
-    public float _gamebottomrightpositiony = -3.5f;
-    public float _gamerightxoffset = 1.5f;
-    public float _gamerightyoffset = 7f;
+    private float _gamebottomrightpositionx = 5.6f;
+    private float _gamebottomrightpositiony = -3.5f;
+    private float _gamerightxoffset = 1.5f;
+    private float _gamerightyoffset = 7f;
     //Constrains for the paddle position
-    public float _paddledrightpositionx = 5.86f;
-    public float _paddlerightxoffset = 0.35f;
-    public float _paddlerightyoffset = 0.82f;
+    private float _paddledrightpositionx = 5.86f;
+    private float _paddlerightxoffset = 0.35f;
+    private float _paddlerightyoffset = 1.0f;
 
-    public Vector3 _eyepos;
+    private Vector3 _eyepos;
     [field: SerializeField] public EyeController _eyeController;
-    [field: SerializeField] public LinearEquations _linearEquations;
+    //[field: SerializeField] public LinearEquations _linearEquations;
 
-    [SerializeField] bool onArrowsEyeEnable;
-    [SerializeField] bool onEyeEnable;
+    //[SerializeField] bool onArrowsEyeEnable;
+    [SerializeField] bool onMouseEnable;
     [SerializeField] bool onKeyboardEnable;
+    [SerializeField] bool onEyeEnable;
+    [SerializeField] bool onFocus;
 
-    public Vector2 _mouseposition;
-    public Vector2 _worldposition;
+    private Vector2 _mouseposition;
+    private Vector2 _worldposition;
 
     public float timeRemaining = 0.6f;
-    protected bool timeIsRunning;
+    private bool timeIsRunning;
 
-    private double decision;
     private void OnEnable()
     {
         _eyeController.oneyePosition += MovewithEye;
+    }
+
+    private void MovewithEye(Vector3 positionofeye)
+    {
+        _eyepos = positionofeye;
     }
 
     private void Start()
@@ -39,12 +45,13 @@ public class RightP : Paddle
         _renderer = GetComponent<Renderer>();
     }
     private void Update() {
+        if (onMouseEnable)
+            MouseUpdate();
         if (onKeyboardEnable)
             KeyboardUpdate();
         if (onEyeEnable)
             MoveUsingEye();
-        if (onArrowsEyeEnable)
-            MovewithArrows();
+        
     }
 
     private void FixedUpdate()
@@ -54,11 +61,6 @@ public class RightP : Paddle
             _rigidbody.AddForce(_direction * this.speed);
         }
 
-    }
-
-    private void MovewithEye(Vector3 positionofeye)
-    {
-        _eyepos = positionofeye;
     }
 
     private void KeyboardUpdate()
@@ -77,6 +79,25 @@ public class RightP : Paddle
         }
     }
 
+    private void MouseUpdate()
+    {
+        _mouseposition = Input.mousePosition;
+        _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
+        //Inside the shape of the paddle
+        if (_worldposition.x > _paddledrightpositionx && _worldposition.x < (_paddledrightpositionx + _paddlerightxoffset))
+        {
+            if (_worldposition.y > (_rigidbody.position.y + _paddlerightyoffset))
+            {
+                _direction = Vector2.up;
+            }
+            else if (_worldposition.y < (_rigidbody.position.y - _paddlerightyoffset))
+            {
+                _direction = Vector2.down;
+            }
+            else { _direction = Vector2.zero; }
+        }
+    }
+
     private void MoveUsingEye()
     {
         //Debug.Log(_eyepos);
@@ -85,27 +106,37 @@ public class RightP : Paddle
             //Debug.Log("Ok");
             if (_eyepos.y > _gamebottomrightpositiony && _eyepos.y < (_gamebottomrightpositiony + _gamerightyoffset))
             {
-                //Debug.Log("Ok");
-
                 //Inside the shape of the paddle
                 if (_eyepos.x > _paddledrightpositionx && _eyepos.x < (_paddledrightpositionx + _paddlerightxoffset))
                 {
                     if (_eyepos.y > (_rigidbody.position.y + _paddlerightyoffset))
                     {
-                        Moveup(timeIsRunning=true);
+                        if (onFocus)
+                        {
+                            Moveup(true);
+                        }
+                        else
+                        {
+                            _direction = Vector2.up;
+                        }
                     }
                     else if (_eyepos.y < (_rigidbody.position.y - _paddlerightyoffset))
                     {
-                        Movedown(timeIsRunning=true);
+                        if (onFocus)
+                        {
+                            Movedown(true);
+                        }
+                        else
+                        {
+                            _direction = Vector2.down;
+                        }
                     }
                     else {
                         timeRemaining = 0.6f;
                         _direction = Vector2.zero; 
                     }
                 }
-
             }
-
         }
     }
 
@@ -145,66 +176,66 @@ public class RightP : Paddle
         }
     }
 
-    public void MovewithArrows()
-    {
-        _mouseposition = Input.mousePosition;
-        _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
+    //public void MovewithArrows()
+    //{
+    //    _mouseposition = Input.mousePosition;
+    //    _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
 
-        //Arrows
-        if (_eyepos.x > 6.895481 && _eyepos.x < 8.9070)
-        {
-            if(_eyepos.y > 0.9690 && _eyepos.y < 2.526324)
-            {
-                if (_eyepos.x <= 7.9012)
-                {
-                    decision = _linearEquations.firstlinearequation((double)_eyepos.x);
-                }
-                else if (_eyepos.x > 7.9012)
-                {
-                    decision = _linearEquations.secondlinearequation((double)_eyepos.x);
-                }
-                else
-                {
-                    decision = 0f;
-                }
-                if (decision >= _eyepos.y)
-                {
-                    _direction = Vector2.up;
+    //    //Arrows
+    //    if (_eyepos.x > 6.895481 && _eyepos.x < 8.9070)
+    //    {
+    //        if(_eyepos.y > 0.9690 && _eyepos.y < 2.526324)
+    //        {
+    //            if (_eyepos.x <= 7.9012)
+    //            {
+    //                decision = _linearEquations.firstlinearequation((double)_eyepos.x);
+    //            }
+    //            else if (_eyepos.x > 7.9012)
+    //            {
+    //                decision = _linearEquations.secondlinearequation((double)_eyepos.x);
+    //            }
+    //            else
+    //            {
+    //                decision = 0f;
+    //            }
+    //            if (decision >= _eyepos.y)
+    //            {
+    //                _direction = Vector2.up;
 
-                }
-                else if (decision <= _eyepos.y)
-                {
-                    _direction = Vector2.zero;
-                }
-                else
-                {
-                    _direction = Vector2.zero;
-                }
-            }
-            else if (_eyepos.y > -2.534976 && _eyepos.y < -0.977653)
-            {
-                if (_eyepos.x <= 7.8904)
-                {
-                    decision = _linearEquations.thirdlinearequation((double) _eyepos.x);
-                }
-                else if (_eyepos.x > 7.8904)
-                {
-                    decision = _linearEquations.fourthlinearequation((double) _eyepos.x);
-                }
-                else { decision = 0f; }
-                if (decision <= _eyepos.y)
-                {
-                    _direction = Vector2.down;
-                }
-                else if (decision >= _eyepos.y)
-                {
-                    _direction = Vector2.zero;
-                }
-                else { _direction = Vector2.zero; }
-            }
-            else { _direction = Vector2.zero; }
-        }
-        else _direction = Vector2.zero; 
-    }
+    //            }
+    //            else if (decision <= _eyepos.y)
+    //            {
+    //                _direction = Vector2.zero;
+    //            }
+    //            else
+    //            {
+    //                _direction = Vector2.zero;
+    //            }
+    //        }
+    //        else if (_eyepos.y > -2.534976 && _eyepos.y < -0.977653)
+    //        {
+    //            if (_eyepos.x <= 7.8904)
+    //            {
+    //                decision = _linearEquations.thirdlinearequation((double) _eyepos.x);
+    //            }
+    //            else if (_eyepos.x > 7.8904)
+    //            {
+    //                decision = _linearEquations.fourthlinearequation((double) _eyepos.x);
+    //            }
+    //            else { decision = 0f; }
+    //            if (decision <= _eyepos.y)
+    //            {
+    //                _direction = Vector2.down;
+    //            }
+    //            else if (decision >= _eyepos.y)
+    //            {
+    //                _direction = Vector2.zero;
+    //            }
+    //            else { _direction = Vector2.zero; }
+    //        }
+    //        else { _direction = Vector2.zero; }
+    //    }
+    //    else _direction = Vector2.zero; 
+    //}
 
 }

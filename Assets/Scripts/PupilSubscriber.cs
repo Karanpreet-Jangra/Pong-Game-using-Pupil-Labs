@@ -21,15 +21,18 @@ public class PupilSubscriber<T> : MonoBehaviour
     {
         dataQueue = new ConcurrentQueue<T>();
     }
+
     private void OnEnable()
     {
         // += => subscribe to an event. When an event occurs, subscribe a method to that event.
         Subscriber.onMessageReceived += OnMessageReceived;
     }
+
     private void OnDisable()
     {
         Subscriber.onMessageReceived -= OnMessageReceived;
     }
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -58,9 +61,7 @@ public class PupilSubscriber<T> : MonoBehaviour
     private void OnMessageReceived(string topic, string message)
     {
         //Decode message to Gaze Data
-        //Debug.Log($"Message received:\ntopic:{topic}\nmessage: {message}");
         var data = JsonUtility.FromJson<T>(message);
         dataQueue.Enqueue(data);
     }
-
 }
