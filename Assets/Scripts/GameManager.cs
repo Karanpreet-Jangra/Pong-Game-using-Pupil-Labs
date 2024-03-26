@@ -88,9 +88,9 @@ public class GameManager : MonoBehaviour
         filename = path + playerName + mode + ".csv";
         Debug.Log($"{filename}");
         TextWriter writer = new StreamWriter(filename, true);
-        var ballspeed = ball._rigidbody.velocity.x;
+        //var ballspeed = ball._rigidbody.velocity.x;
         writer.WriteLine("AI Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
-                          + timebetweenrounds + "," + "Ball Speed: " + "," + ballspeed);
+                          + timebetweenrounds);
         writer.Close();
 
     }
