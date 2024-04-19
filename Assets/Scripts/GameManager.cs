@@ -103,13 +103,12 @@ public class GameManager : MonoBehaviour
                               + timeofnextround);
             writer.Close();
         }
-        
+ 
 
     }
 
     private void OnApplicationQuit()
     {
-
         NetMQConfig.Cleanup(false);
         //The total time since start
         Debug.Log((Time.realtimeSinceStartup));

@@ -2709,7 +2709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: Bill
   mode: withfocus
-  totalNumberOfTries: 30
+  totalNumberOfTries: 5
   ball: {fileID: 1842725724}
   leftplayertext: {fileID: 175299433}
   rightplayertext: {fileID: 1439494962}
