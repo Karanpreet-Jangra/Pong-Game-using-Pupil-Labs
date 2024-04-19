@@ -13,11 +13,12 @@ public class EyeController: MonoBehaviour
     public Transform controlledEyeObject;
     public event Action<Vector3> oneyePosition;
 
-    double lastTimestamp = -1;
+    double lastTimestampnegative = -1;
+    //double lastTimestanmppositive = 1;
     double smooth_x = 0.5f;
     double smooth_y = 0.5f;
-    public double smoothness = 0.35f;
-    private double confid;
+    public double smoothness = 0.3f;
+    //private double confid;
 
     private void OnEnable()
     {
@@ -32,43 +33,50 @@ public class EyeController: MonoBehaviour
     private void TrySortData(SurfaceData data)
     {
         data.SortGazeList();
-        double sumx = 0;
-        double sumy = 0;
+        //double sumx = 0;
+        //double sumy = 0;
         //Debug.Log($"GAZES ARE: {data.gaze_on_surfaces.Count}");
         var numberofgazes = data.gaze_on_surfaces.Count;
+        //Debug.Log(numberofgazes);
         if(numberofgazes > 0)
         {
-            if (data.gaze_on_surfaces[0].timestamp >= lastTimestamp)
+            if (data.gaze_on_surfaces[0].timestamp >= lastTimestampnegative)
             {
-                foreach (var gaze in data.gaze_on_surfaces)
-                {
-                    //ProcessGaze(gaze.NormPosX, gaze.NormPosY);
-                    sumx += gaze.NormPosX;
-                    sumy += gaze.NormPosY;
-                    lastTimestamp = gaze.timestamp;
-                    confid = gaze.confidence;
-                    //Debug.Log($"{gaze.topic} {gaze.timestamp} {gaze.NormPosX} {gaze.NormPosY}");
-                }
-                sumx = sumx / numberofgazes;
-                sumy = sumy / numberofgazes;
+                    //Using the avegage 
+                    //foreach (var gaze in data.gaze_on_surfaces)
+                    //{
+                    //    //ProcessGaze(gaze.NormPosX, gaze.NormPosY);
+                    //    sumx += gaze.NormPosX;
+                    //    sumy += gaze.NormPosY;
+                    //    lastTimestampnegative = gaze.timestamp;
+                    //    confid = gaze.confidence;
+                    //    //Debug.Log($"{gaze.topic} {gaze.timestamp} {gaze.NormPosX} {gaze.NormPosY}");
+                    //}
+                    //sumx = sumx / numberofgazes;
+                    //sumy = sumy / numberofgazes;                    
+                    //ProcessGaze(sumx, sumy);
 
-                //Using the avegage 
-                //ProcessGaze(sumx, sumy);
-
-                //Using the last gaze data
-                var lastdatax = data.gaze_on_surfaces[numberofgazes - 1].NormPosX;
-                var lastdatay = data.gaze_on_surfaces[numberofgazes - 1].NormPosY;
-                ProcessGaze(lastdatax, lastdatay);
-                //Debug.Log(confid);
+                    //Using the last gaze data
+                    var lastdatax = data.gaze_on_surfaces[numberofgazes - 1].NormPosX;
+                    var lastdatay = data.gaze_on_surfaces[numberofgazes - 1].NormPosY;
+                    ProcessGaze(lastdatax, lastdatay);
             }
+            //else if(data.gaze_on_surfaces[0].timestamp < 0)
+            //{
+            //    //Using the last gaze data
+            //    var lastdatax2 = data.gaze_on_surfaces[numberofgazes - 1].NormPosX;
+            //    var lastdatay2 = data.gaze_on_surfaces[numberofgazes - 1].NormPosY;
+            //    ProcessGaze(lastdatax2, lastdatay2);
+            //}
+            
         }
         
     }
-    private void ProcessGaze(double averagex, double averagey)
+    private void ProcessGaze(double x, double y)
     {
-        //point = Normalized coordinates on the Screen Rectangle
+        //point: Normalized coordinates on the Screen Rectangle
         //var point = new Vector2((float)gaze.NormPosX, (float)gaze.NormPosY);
-        var point = new Vector2((float)averagex,(float)averagey);
+        var point = new Vector2((float)x,(float)y);
         //surfRect: In Local Space relative to Canvas
         var surfRect = surfRectTransform.rect;
         surfRect.x = 0;
@@ -84,10 +92,8 @@ public class EyeController: MonoBehaviour
         //Debug.Log(result);
         oneyePosition?.Invoke(result);
     }
-
-    [ContextMenu("Test")]
-    private void Test()
-    {
-        Debug.Log("BOO");
+    private void Update()
+    { 
+        //Debug.Log(result);
     }
 }

@@ -79,7 +79,7 @@ public class ZmqSubscriber
         catch (Exception e) {
             Debug.Log(e.Message);
             Debug.Log("Exception");
-            if(cSocket != null && !cSocket.IsDisposed)
+            if(cSocket != null && !cSocket.IsDisposed) //
                 cSocket.Close();
             return;
         }

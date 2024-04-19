@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public string playerName = "";
     public string mode = "";
     private string filename = "";
+
     public int totalNumberOfTries;
 
     public Ball ball;
@@ -20,10 +21,8 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text rightplayertext;
     public Paddle leftpaddle;
     public Paddle rightpaddle;
-
-    private float timeoffirstround;
-    private float timebetweenrounds;
-  
+    private float firstroundtime;
+    private float timeofnextround;
 
     public void Leftplayerscores()
     {
@@ -56,42 +55,55 @@ public class GameManager : MonoBehaviour
         this.ball.ResetPosition();
         this.ball.AddStartingForce();
         this.leftpaddle.ResetPosition();
-        this.rightpaddle.ResetPosition();   
+        this.rightpaddle.ResetPosition();
     }
 
     private void CalculateTimeBetweenRounds()
     {
-        if ((_rightplayerscores == 1 && _leftplayerscores == 0) || (_rightplayerscores == 0 && _leftplayerscores == 1))
+        if(_rightplayerscores == 0 && _leftplayerscores == 0)
         {
-            timeoffirstround = Time.time;
-            Debug.Log("Time between each round: ");
-            Debug.Log(timeoffirstround);
-            timebetweenrounds = timeoffirstround;
+            firstroundtime = Time.time;
+            Debug.Log("Time between first round: ");
+            Debug.Log(firstroundtime);
         }
-        else
+        else //The other rounds
         {
-            var temp1 = Time.time;
-            var temp2 = timeoffirstround;
+            var lasttime = firstroundtime;
+            var currenttime = Time.time;
             //Debug.Log("Ok");
             //Debug.Log(temp1);
-            var timeofnextrounds = temp1 - temp2;
+            timeofnextround = currenttime - lasttime;
             Debug.Log("Time between each round: ");
-            Debug.Log(timeofnextrounds);
-            Debug.Log(Application.dataPath);
-            timeoffirstround = temp1;
-            timebetweenrounds = timeofnextrounds;
+            Debug.Log(timeofnextround);
+            //Debug.Log(Application.dataPath);
+            firstroundtime = currenttime;
+            //timebetweenrounds = timeofnextround;
         }
     }
 
     private void WriteMetrics()
     {
-        filename = path + playerName + mode + ".csv";
-        Debug.Log($"{filename}");
-        TextWriter writer = new StreamWriter(filename, true);
-        //var ballspeed = ball._rigidbody.velocity.x;
-        writer.WriteLine("AI Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
-                          + timebetweenrounds);
-        writer.Close();
+        if(_rightplayerscores == 0 && _leftplayerscores == 0)
+        {
+            filename = path + playerName + mode + ".csv";
+            Debug.Log($"{filename}");
+            TextWriter writer = new StreamWriter(filename, true);
+            //var ballspeed = ball._rigidbody.velocity.x;
+            writer.WriteLine("Bot Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
+                              + firstroundtime);
+            writer.Close();
+        }
+        else
+        {
+            filename = path + playerName + mode + ".csv";
+            Debug.Log($"{filename}");
+            TextWriter writer = new StreamWriter(filename, true);
+            //var ballspeed = ball._rigidbody.velocity.x;
+            writer.WriteLine("Bot Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
+                              + timeofnextround);
+            writer.Close();
+        }
+        
 
     }
 
@@ -100,7 +112,7 @@ public class GameManager : MonoBehaviour
 
         NetMQConfig.Cleanup(false);
         //The total time since start
-        //Debug.Log((Time.realtimeSinceStartup));
+        Debug.Log((Time.realtimeSinceStartup));
     }
 
     public void QuitGame()

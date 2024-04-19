@@ -1,34 +1,44 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Windows.Speech;
+using System.Linq;
+using System;
 
 public class RightP : Paddle
 {
     private Vector2 _direction;
-    //Constrains for the eye position
-    private float _gamebottomrightpositionx = 5.6f;
+    //Using the mouse modality
+    //Constrains for mouse, pio austhres
+    private float _paddledrightpositionx = 5.5f;
+    private float _paddlerightxoffset = 1f;
+
+    //Using the eye modality
+    //Constrains for focus, pio austhres
+    private float _gamebottomrightpositionx = 6.9f;
     private float _gamebottomrightpositiony = -3.5f;
     private float _gamerightxoffset = 1.5f;
     private float _gamerightyoffset = 7f;
-    //Constrains for the paddle position
-    private float _paddledrightpositionx = 5.86f;
-    private float _paddlerightxoffset = 0.35f;
-    private float _paddlerightyoffset = 1.0f;
+    
+    //Constrains for paddle on y axis for both mouse and eye modality
+    private float _paddlerightyoffset = 0.95f;
 
-    private Vector3 _eyepos;
+    public Vector3 _eyepos;
     [field: SerializeField] public EyeController _eyeController;
-    //[field: SerializeField] public LinearEquations _linearEquations;
 
     //[SerializeField] bool onArrowsEyeEnable;
     [SerializeField] bool onMouseEnable;
     [SerializeField] bool onKeyboardEnable;
     [SerializeField] bool onEyeEnable;
     [SerializeField] bool onFocus;
+    //[SerializeField] bool onVoiceEnable;
 
     private Vector2 _mouseposition;
     private Vector2 _worldposition;
 
-    public float timeRemaining = 0.6f;
-    private bool timeIsRunning;
+    //For voice modality
+    //private KeywordRecognizer keywordRecognizer;
+    //private Dictionary<string, Action> actions = new Dictionary<string, Action>();
 
     private void OnEnable()
     {
@@ -43,28 +53,38 @@ public class RightP : Paddle
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
+        //actions.Add("back", VoiceMoveup);
+        //actions.Add("stop", VoiceMovestop);
+        //actions.Add("down", VoiceMovedown);
+        //keywordRecognizer = new KeywordRecognizer(actions.Keys.ToArray());
+        //keywordRecognizer.OnPhraseRecognized += RecognizedSpeech;
+        //if (onVoiceEnable)
+        //    MovewithVoice();
     }
     private void Update() {
+        //var firstframetime = Time.time;
+        //var everyotherframetime = Time.time;
+        //Debug.Log(timeofrounds);
         if (onMouseEnable)
             MouseUpdate();
         if (onKeyboardEnable)
             KeyboardUpdate();
         if (onEyeEnable)
             MoveUsingEye();
-        
     }
 
     private void FixedUpdate()
     {
-        if (_direction.sqrMagnitude != 0)
+        if (_direction.sqrMagnitude != 0 )
         {
             _rigidbody.AddForce(_direction * this.speed);
         }
-
     }
 
     private void KeyboardUpdate()
     {
+        _mouseposition = Input.mousePosition;
+        _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _direction = Vector2.up;
@@ -83,7 +103,7 @@ public class RightP : Paddle
     {
         _mouseposition = Input.mousePosition;
         _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
-        //Inside the shape of the paddle
+        //The paddle
         if (_worldposition.x > _paddledrightpositionx && _worldposition.x < (_paddledrightpositionx + _paddlerightxoffset))
         {
             if (_worldposition.y > (_rigidbody.position.y + _paddlerightyoffset))
@@ -100,81 +120,83 @@ public class RightP : Paddle
 
     private void MoveUsingEye()
     {
+        _mouseposition = Input.mousePosition;
+        _worldposition = Camera.main.ScreenToWorldPoint(_mouseposition);
         //Debug.Log(_eyepos);
         if (_eyepos.x < _gamebottomrightpositionx && _eyepos.x > (_gamebottomrightpositionx - _gamerightxoffset))
         {
             //Debug.Log("Ok");
             if (_eyepos.y > _gamebottomrightpositiony && _eyepos.y < (_gamebottomrightpositiony + _gamerightyoffset))
             {
-                //Inside the shape of the paddle
-                if (_eyepos.x > _paddledrightpositionx && _eyepos.x < (_paddledrightpositionx + _paddlerightxoffset))
-                {
-                    if (_eyepos.y > (_rigidbody.position.y + _paddlerightyoffset))
+                //The paddle
+                if (_eyepos.y > (_rigidbody.position.y + _paddlerightyoffset))
                     {
                         if (onFocus)
                         {
-                            Moveup(true);
+                            _direction = Vector2.up;
+                            _renderer.material.color = Color.black;
                         }
                         else
                         {
                             _direction = Vector2.up;
                         }
                     }
-                    else if (_eyepos.y < (_rigidbody.position.y - _paddlerightyoffset))
+                else if (_eyepos.y < (_rigidbody.position.y - _paddlerightyoffset))
                     {
                         if (onFocus)
                         {
-                            Movedown(true);
+                            _direction = Vector2.down;
+                            _renderer.material.color = Color.gray;
                         }
                         else
                         {
                             _direction = Vector2.down;
                         }
                     }
-                    else {
-                        timeRemaining = 0.6f;
+                else {
                         _direction = Vector2.zero; 
-                    }
                 }
             }
+            else
+            {
+                _direction = Vector2.zero;
+            }
+        }
+        else
+        {
+            _direction = Vector2.zero;
         }
     }
 
-    public void Moveup(bool timerunning)
-    {
-        if (timerunning)
-        {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.deltaTime;
-            }
-            else
-            {
-                timeRemaining = 0.6f;
-                timeIsRunning = false;
-                _direction = Vector2.up;
-                _renderer.material.color = Color.black;
-            }
-        }
-    }
 
-    public void Movedown(bool timerunning)
-    {
-        if (timerunning)
-        {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.deltaTime;
-            }
-            else
-            {
-                timeRemaining = 0.6f;
-                timeIsRunning = false;
-                _direction = Vector2.down;
-                _renderer.material.color = Color.gray;
-            }
-        }
-    }
+    //public void MovewithVoice()
+    //{
+    //    keywordRecognizer.Start();
+    //}
+
+    //private void RecognizedSpeech(PhraseRecognizedEventArgs speech)
+    //{
+    //    Debug.Log(speech.text);
+    //    actions[speech.text].Invoke();
+    //}
+
+    //public void VoiceMoveup()
+    //{
+    //    _direction = Vector2.up;
+    //}
+    //public void VoiceMovedown()
+    //{
+    //    _direction = Vector2.down;
+    //}
+
+    //public void VoiceMovestop()
+    //{
+    //    _direction = Vector2.zero;
+    //}
+    //private void OnApplicationQuit()
+    //{
+    //    keywordRecognizer.Stop();
+    //}
 
     //public void MovewithArrows()
     //{
