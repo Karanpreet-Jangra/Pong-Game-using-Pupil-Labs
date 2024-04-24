@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public string mode = "";
     private string filename = "";
 
-    public int totalNumberOfTries;
+    public int totalNumberOfWins;
 
     public Ball ball;
     private int _leftplayerscores;
@@ -29,10 +29,6 @@ public class GameManager : MonoBehaviour
         CalculateTimeBetweenRounds();
         WriteMetrics();
         _leftplayerscores++;
-        if (_leftplayerscores == totalNumberOfTries)
-        {
-            QuitGame();
-        }
         this.leftplayertext.text = _leftplayerscores.ToString(); 
         ResetRound();
     }
@@ -42,7 +38,7 @@ public class GameManager : MonoBehaviour
         CalculateTimeBetweenRounds();
         WriteMetrics();
         _rightplayerscores++;
-        if (_rightplayerscores == totalNumberOfTries)
+        if (_rightplayerscores == totalNumberOfWins)
         {
             QuitGame();
         }

@@ -2204,7 +2204,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 0.25
   m_LinearDrag: 2
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -2302,9 +2302,9 @@ MonoBehaviour:
   _eyepos: {x: 0, y: 0, z: 0}
   _eyeController: {fileID: 1818142399}
   onMouseEnable: 0
-  onKeyboardEnable: 1
-  onEyeEnable: 0
-  onFocus: 0
+  onKeyboardEnable: 0
+  onEyeEnable: 1
+  onFocus: 1
 --- !u!114 &1455464417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2707,9 +2707,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f8ef1e69f84984d958cd18957665bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: Bill
+  playerName: BasilisSiatos
   mode: withfocus
-  totalNumberOfTries: 5
+  totalNumberOfWins: 4
   ball: {fileID: 1842725724}
   leftplayertext: {fileID: 175299433}
   rightplayertext: {fileID: 1439494962}
