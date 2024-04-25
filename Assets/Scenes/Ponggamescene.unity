@@ -931,7 +931,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.25
+  m_Mass: 0.3
   m_LinearDrag: 2
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -2204,7 +2204,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.25
+  m_Mass: 0.3
   m_LinearDrag: 2
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -2302,9 +2302,9 @@ MonoBehaviour:
   _eyepos: {x: 0, y: 0, z: 0}
   _eyeController: {fileID: 1818142399}
   onMouseEnable: 0
-  onKeyboardEnable: 0
-  onEyeEnable: 1
-  onFocus: 1
+  onKeyboardEnable: 1
+  onEyeEnable: 0
+  onFocus: 0
 --- !u!114 &1455464417
 MonoBehaviour:
   m_ObjectHideFlags: 0

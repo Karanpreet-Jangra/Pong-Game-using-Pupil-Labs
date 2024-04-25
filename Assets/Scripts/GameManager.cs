@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public Paddle rightpaddle;
     private float firstroundtime;
     private float timeofnextround;
+    private float totaltime;
 
     public void Leftplayerscores()
     {
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
         if(_rightplayerscores == 0 && _leftplayerscores == 0)
         {
             filename = path + playerName + mode + ".csv";
-            Debug.Log($"{filename}");
+            //Debug.Log($"{filename}");
             TextWriter writer = new StreamWriter(filename, true);
             //var ballspeed = ball._rigidbody.velocity.x;
             writer.WriteLine("Bot Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
@@ -92,22 +93,33 @@ public class GameManager : MonoBehaviour
         else
         {
             filename = path + playerName + mode + ".csv";
-            Debug.Log($"{filename}");
+            //Debug.Log($"{filename}");
             TextWriter writer = new StreamWriter(filename, true);
             //var ballspeed = ball._rigidbody.velocity.x;
             writer.WriteLine("Bot Score:" + "," + _leftplayerscores + "," + "Player Score: " + "," + _rightplayerscores + "," + "Time Between Rounds: " + ","
                               + timeofnextround);
             writer.Close();
         }
- 
+    }
 
+    private void WriteTotalTime()
+    {
+        filename = path + playerName + mode + ".csv";
+        //Debug.Log($"{filename}");
+        TextWriter writer = new StreamWriter(filename, true);
+        //var ballspeed = ball._rigidbody.velocity.x;
+        writer.WriteLine("Total Time:" + "," + totaltime);
+        writer.Close();
     }
 
     private void OnApplicationQuit()
     {
+        totaltime = Time.realtimeSinceStartup;
+        WriteTotalTime();
         NetMQConfig.Cleanup(false);
         //The total time since start
-        Debug.Log((Time.realtimeSinceStartup));
+        Debug.Log("The total time since start is: ");
+        Debug.Log(totaltime);
     }
 
     public void QuitGame()
