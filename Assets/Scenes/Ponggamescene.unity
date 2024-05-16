@@ -1282,7 +1282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &613849849
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2302,8 +2302,8 @@ MonoBehaviour:
   _eyepos: {x: 0, y: 0, z: 0}
   _eyeController: {fileID: 1818142399}
   onMouseEnable: 0
-  onKeyboardEnable: 1
-  onEyeEnable: 0
+  onKeyboardEnable: 0
+  onEyeEnable: 1
   onFocus: 0
 --- !u!114 &1455464417
 MonoBehaviour:
@@ -2707,8 +2707,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f8ef1e69f84984d958cd18957665bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: BasilisSiatos
-  mode: withfocus
+  playerName: Maria
+  mode: withoutfocus
   totalNumberOfWins: 4
   ball: {fileID: 1842725724}
   leftplayertext: {fileID: 175299433}
@@ -2807,7 +2807,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818142398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

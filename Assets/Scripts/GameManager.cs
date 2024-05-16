@@ -7,7 +7,8 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    private string path = "C:/Users/karen/Documents/GithubProjectPongGame/Pong-Game-using-Pupil-Labs/Assets/Metrics/";
+    private string path = "C:/Users/up1059491/Documents/GitHub/Pong-Game-using-Pupil-Labs/Assets/Metrics/";
+    //C:\Users\up1059491\Documents\GitHub\Pong-Game-using-Pupil-Labs\Assets\Metrics
     public string playerName = "";
     public string mode = "";
     private string filename = "";
