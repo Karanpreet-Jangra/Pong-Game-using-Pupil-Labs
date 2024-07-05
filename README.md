@@ -1,2 +1,2 @@
 # Pong-Game-using-Pupil-Labs
-First try of Pong Game using Pupil Labs Eye Tracker.
+Eye Tracking has been an evolving technology that facilitates hands-free human-computer interaction. This capability is the cornerstone for its ever-increasing application in scientific, research and industrial applications. The aim of this git is to design a timeless arcade game, the 2D Pong Game, on the Unity game platform, with the variation of using an Eye Tracker, the Pupil Labs Core Eye Tracker as an alternative interaction. 
