@@ -6,10 +6,6 @@
 
 Eye tracking has been an evolving technology that facilitates hands-free human-computer interaction. This capability is the cornerstone for its ever-increasing application in scientific, research, and industrial applications. This project aims to design a timeless arcade game, the 2D Pong Game, on the Unity game platform, with the variation of using an Eye Tracker - the Pupil Labs Core Eye Tracker as an alternative interaction method.
 
-## Project Overview
-
-This repository contains the implementation of a classic Pong game with eye-tracking controls, demonstrating the integration of modern eye-tracking technology with traditional gaming experiences. The project explores the feasibility and user experience of eye-controlled gameplay, providing insights into hands-free human-computer interaction in gaming environments.
-
 ## Key Features
 
 - Eye-Controlled Gameplay: Use eye movements to control the paddle instead of traditional keyboard/mouse input.
